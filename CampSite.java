@@ -91,4 +91,5 @@ public abstract class CampSite implements Serializable {
                 ", actualCheckOut=" + checkOutStr +
                 '}';
     }
+
 }

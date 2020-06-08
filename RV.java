@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 public class RV extends CampSite {
 
     private int power;
+    private boolean exceeds;
 
     public RV() {
     }
@@ -33,6 +34,8 @@ public class RV extends CampSite {
                     cost += 20;
                     gTemp.add(Calendar.DATE, -1);
                 }
+                if(cost > 500)
+                    exceeds = true;
                 return cost;
             }
         }

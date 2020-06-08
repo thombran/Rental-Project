@@ -60,6 +60,13 @@ public class ListModel extends AbstractTableModel {
 
                 break;
 
+            case ExceedsCost:
+                fileredListCampSites = (ArrayList<CampSite>) listCampSites.stream()
+                        .filter(n -> n.actualCheckOut == null)
+                        .filter(n -> n.getClass() == RV.class || n.getClass() == Tent.class)
+                        .filter(RV ->(RV.getCost() > 500) || RV.getClass() == Tent.class && RV.getCost() > 250)
+                        .collect(Collectors.toList()); //TODO Need to sort by cost still, not sure how to use compareTo
+                break;
             default:
                 throw new RuntimeException("upDate is in undefined state: " + display);
         }
@@ -170,6 +177,7 @@ public class ListModel extends AbstractTableModel {
                 throw new RuntimeException("Row,col out of range: " + row + " " + col);
         }
     }
+
 
     public void add(CampSite a) {
         listCampSites.add(a);

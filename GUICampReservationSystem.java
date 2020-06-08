@@ -29,7 +29,7 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
 
     private JMenuItem currentParkItemScn;
     private JMenuItem checkOUtItemScn;
-    private JMenuItem exceedsItemScn;
+    private JMenuItem exceedsCost;
 
     private JPanel panel;
 
@@ -61,7 +61,7 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
 
         currentParkItemScn = new JMenuItem("Current Park Screen");
         checkOUtItemScn = new JMenuItem("Check out screen");
-        exceedsItemScn = new JMenuItem("Exceeds Screen");
+        exceedsCost = new JMenuItem("Exceeds Screen");
 
 
         //adding items to bar
@@ -72,7 +72,7 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
         fileMenu.addSeparator();
         fileMenu.add(currentParkItemScn);
         fileMenu.add(checkOUtItemScn);
-        fileMenu.add(exceedsItemScn);
+        fileMenu.add(exceedsCost);
 
         actionMenu.add(reserveRVItem);
         actionMenu.add(reserveTentOnlyItem);
@@ -93,7 +93,7 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
 
         currentParkItemScn.addActionListener(this);
         checkOUtItemScn.addActionListener(this);
-        exceedsItemScn.addActionListener(this);
+        exceedsCost.addActionListener(this);
 
         setJMenuBar(menus);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -119,6 +119,9 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
 
         if (checkOUtItemScn == comp)
             DList.setDisplay(ScreenDisplay.CheckOutGuest);
+
+        if(exceedsCost == comp)
+            DList.setDisplay((ScreenDisplay.ExceedsCost));
 
         if (openSerItem == comp) {
             JFileChooser chooser = new JFileChooser();
@@ -168,7 +171,7 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
                 CheckOutOnDialog dialog = new CheckOutOnDialog(this, unit);
 
                 JOptionPane.showMessageDialog(null,
-                        " Be sure to thank " + unit.getGuestName() +
+                        "Be sure to thank " + unit.getGuestName() +
                         "\n for camping with us and the price is:  " +
                         unit.getCost() +
                         " dollars");
