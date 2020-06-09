@@ -1,4 +1,4 @@
-package project3;
+package Project2;
 
 import javax.swing.table.AbstractTableModel;
 import java.io.*;
@@ -39,8 +39,8 @@ public class ListModel extends AbstractTableModel {
     private void UpdateScreen() {
         switch (display) {
             case CurrentParkStatus:
-                fileredListCampSites = (ArrayList<CampSite>) listCampSites.stream().
-                        filter(n -> n.actualCheckOut == null).collect(Collectors.toList());
+                fileredListCampSites = (ArrayList<CampSite>) listCampSites.stream()
+                        .filter(n -> n.actualCheckOut == null).collect(Collectors.toList());
 
                 // Note: This uses Lambda function
                 Collections.sort(fileredListCampSites, (n1, n2) -> n1.getGuestName().compareTo(n2.guestName));
@@ -65,7 +65,9 @@ public class ListModel extends AbstractTableModel {
                         .filter(n -> n.actualCheckOut == null)
                         .filter(n -> n.getClass() == RV.class || n.getClass() == Tent.class)
                         .filter(RV ->(RV.getCost() > 500) || RV.getClass() == Tent.class && RV.getCost() > 250)
-                        .collect(Collectors.toList()); //TODO Need to sort by cost still, not sure how to use compareTo
+                        .collect(Collectors.toList());
+                        Collections.sort(fileredListCampSites, (n2, n1) -> Double.compare(n1.getCost(),n2.getCost()));
+
                 break;
             default:
                 throw new RuntimeException("upDate is in undefined state: " + display);
