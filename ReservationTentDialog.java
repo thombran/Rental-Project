@@ -117,6 +117,7 @@ public class ReservationTentDialog extends JDialog implements ActionListener {
                 tent.setEstimatedCheckOut(gregTemp);
 
             } catch (ParseException e1) {
+                throw new IllegalArgumentException("Invalid Date Format", e1);
 //                  Do some thing good, what I am not sure.
             }
 
