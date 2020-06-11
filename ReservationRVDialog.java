@@ -112,6 +112,8 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
                 d2 = df.parse(txtDateCheckout.getText());
                 gregTemp.setTime(d2);
                 rv.setEstimatedCheckOut(gregTemp);
+                if (rv.getCheckIn().after(rv.getEstimatedCheckOut()))
+                    throw new IllegalArgumentException("Estimated Checkout cant be before Check in.");
 
             } catch (ParseException e1) {
                 throw new IllegalArgumentException("Invalid Date Format", e1);
