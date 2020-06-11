@@ -1,4 +1,4 @@
-package project3;
+package Project2;
 
 
 import javax.swing.*;
@@ -40,10 +40,10 @@ public class CheckOutOnDialog extends JDialog implements ActionListener {
 		closeStatus = CANCEL;
 		setSize(300,100);
 
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		//setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-
+		dateFormat.setLenient(false);
         txtDate = new JTextField(dateFormat.format(campSite.
 				getEstimatedCheckOut().getTime()),30);
 
@@ -81,6 +81,7 @@ public class CheckOutOnDialog extends JDialog implements ActionListener {
 			// save the information in the object
 			closeStatus = OK;
 			SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			df.setLenient(false);
 			GregorianCalendar gTemp = new GregorianCalendar();
 
 			Date d = null;
@@ -88,8 +89,11 @@ public class CheckOutOnDialog extends JDialog implements ActionListener {
 				d = df.parse(txtDate.getText());
 				gTemp.setTime(d);
 				campSite.setActualCheckOut(gTemp);
+				if (campSite.actualCheckOut.before(campSite.checkIn))
+					throw new IllegalArgumentException();
 
-			} catch (ParseException e1) {
+			}catch (ParseException e1) {
+				throw new IllegalArgumentException("Invalid Date Format", e1);
 			}
 
 		}
