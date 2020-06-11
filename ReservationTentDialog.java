@@ -123,6 +123,8 @@ public class ReservationTentDialog extends JDialog implements ActionListener {
 
             tent.setGuestName(txtGuestName.getText());
             tent.setNumberOfTenters(Integer.parseInt(txtNumberOfTenters.getText()));
+            if (tent.getNumberOfTenters() <= 0)
+                throw new IllegalArgumentException("Must have at least 1 Tenter");
         }
 
         // make the dialog disappear
