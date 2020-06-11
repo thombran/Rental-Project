@@ -1,4 +1,4 @@
-package project3;
+package Project2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,7 +40,7 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
         setSize(500,200);
 
         // prevent user from closing window
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        //setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         // instantiate and display two text fields
         txtGuestName = new JTextField("Roger",30);
@@ -50,6 +50,7 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
 
         Calendar currentDate = Calendar.getInstance();
         SimpleDateFormat formatter= new SimpleDateFormat("MM/dd/yyyy"); //format it as per your requirement
+        formatter.setLenient(false);
         String dateNow = formatter.format(currentDate.getTime());
         currentDate.add(Calendar.DATE, 1);
         String datetomorrow = formatter.format(currentDate.getTime());
@@ -97,7 +98,7 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
             // save the information in the object
             closeStatus = OK;
             SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
+            df.setLenient(false);
 
             Date d1 = null;
             Date d2 = null;
@@ -119,6 +120,8 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
             rv.setGuestName(txtGuestName.getText());
             rv.setPower(Integer.parseInt(txtPowerSupplied.getText()));
         }
+
+
 
         // make the dialog disappear
         dispose();
