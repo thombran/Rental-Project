@@ -116,7 +116,14 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
                     throw new IllegalArgumentException("Estimated Checkout cant be before Check in.");
 
             } catch (ParseException e1) {
-                throw new IllegalArgumentException("Invalid Date Format", e1);
+
+                JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                closeStatus = CANCEL;
+
+
+
+
+                //throw new IllegalArgumentException("Invalid Date Format", e1);
 //                  Do some thing good, what I am not sure.
             }
 
