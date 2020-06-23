@@ -105,7 +105,43 @@ public class ReservationTentDialog extends JDialog implements ActionListener {
             df.setLenient(false);
             Date d1 = null;
             Date d2 = null;
+
+            int count = 0;
             try {
+                String dateIn = txtDateCheckin.getText();
+                dateIn = dateIn.substring(dateIn.lastIndexOf('/') + 1);
+                if (dateIn.length() != 4) {
+                    JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                    closeStatus = CANCEL;
+                    count += 1;
+                }
+                else {
+                    for (int i = 0; i < dateIn.length(); i++) {
+                        if (!Character.isDigit(dateIn.charAt(i))) {
+                            JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                            closeStatus = CANCEL;
+                            count += 1;
+                        }
+                    }
+                }
+
+                String dateOut = txtDateCheckout.getText();
+                dateOut = dateOut.substring(dateOut.lastIndexOf('/') + 1);
+                if (dateOut.length() != 4) {
+                    JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                    closeStatus = CANCEL;
+                    count += 1;
+                }
+                else {
+                    for (int i = 0; i < dateOut.length(); i++) {
+                        if (!Character.isDigit(dateOut.charAt(i))) {
+                            JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                            closeStatus = CANCEL;
+                            count += 1;
+                        }
+                    }
+                }
+
                 GregorianCalendar gregTemp = new GregorianCalendar();
                 d1 = df.parse(txtDateCheckin.getText());
                 gregTemp.setTime(d1);
@@ -115,19 +151,29 @@ public class ReservationTentDialog extends JDialog implements ActionListener {
                 d2 = df.parse(txtDateCheckout.getText());
                 gregTemp.setTime(d2);
                 tent.setEstimatedCheckOut(gregTemp);
-                if (tent.getCheckIn().after(tent.getEstimatedCheckOut()))
-                    throw new IllegalArgumentException("Estimated Checkout cant be before Check in.");
+                if (tent.getCheckIn().after(tent.getEstimatedCheckOut())) {
+                    JOptionPane.showMessageDialog(getParent(), "Estimated Checkout cant be before Check in.");
+                    closeStatus = CANCEL;
+                }
+
 
             } catch (ParseException e1) {
                 JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
                 closeStatus = CANCEL;
 //                  Do some thing good, what I am not sure.
             }
-
-            tent.setGuestName(txtGuestName.getText());
-            tent.setNumberOfTenters(Integer.parseInt(txtNumberOfTenters.getText()));
-            if (tent.getNumberOfTenters() <= 0)
-                throw new IllegalArgumentException("Must have at least 1 Tenter");
+            try {
+                tent.setGuestName(txtGuestName.getText());
+                tent.setNumberOfTenters(Integer.parseInt(txtNumberOfTenters.getText()));
+                if (tent.getNumberOfTenters() <= 0) {
+                    JOptionPane.showMessageDialog(getParent(), "Must have at least 1 Tenter");
+                    closeStatus = CANCEL;
+                }
+            }
+            catch (Exception e1) {
+                JOptionPane.showMessageDialog(getParent(), "Invalid number of tenters!");
+                closeStatus = CANCEL;
+            }
         }
 
         // make the dialog disappear

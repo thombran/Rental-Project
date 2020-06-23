@@ -102,7 +102,43 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
 
             Date d1 = null;
             Date d2 = null;
+
+            int count = 0;
             try {
+                String dateIn = txtDateCheckin.getText();
+                dateIn = dateIn.substring(dateIn.lastIndexOf('/') + 1);
+                if (dateIn.length() != 4) {
+                    JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                    closeStatus = CANCEL;
+                    count += 1;
+                }
+                else {
+                    for (int i = 0; i < dateIn.length(); i++) {
+                        if (!Character.isDigit(dateIn.charAt(i))) {
+                            JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                            closeStatus = CANCEL;
+                            count += 1;
+                        }
+                    }
+                }
+
+                String dateOut = txtDateCheckout.getText();
+                dateOut = dateOut.substring(dateOut.lastIndexOf('/') + 1);
+                if (dateOut.length() != 4) {
+                    JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                    closeStatus = CANCEL;
+                    count += 1;
+                }
+                else {
+                    for (int i = 0; i < dateOut.length(); i++) {
+                        if (!Character.isDigit(dateOut.charAt(i))) {
+                            JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                            closeStatus = CANCEL;
+                            count += 1;
+                        }
+                    }
+                }
+
                 GregorianCalendar gregTemp = new GregorianCalendar();
                 d1 = df.parse(txtDateCheckin.getText());
                 gregTemp.setTime(d1);
@@ -112,13 +148,16 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
                 d2 = df.parse(txtDateCheckout.getText());
                 gregTemp.setTime(d2);
                 rv.setEstimatedCheckOut(gregTemp);
-                if (rv.getCheckIn().after(rv.getEstimatedCheckOut()))
-                    throw new IllegalArgumentException("Estimated Checkout cant be before Check in.");
+
+                if (rv.getCheckIn().after(rv.getEstimatedCheckOut()) && count < 1)
+                    JOptionPane.showMessageDialog(getParent(), "Estimated Checkout cant be before Check in.");
+                    closeStatus = CANCEL;
 
             } catch (ParseException e1) {
-
-                JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
-                closeStatus = CANCEL;
+                if (count < 1) {
+                    JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                    closeStatus = CANCEL;
+                }
 
 
 

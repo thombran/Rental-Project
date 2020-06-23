@@ -1,4 +1,4 @@
-package project3;
+package Project2;
 
 public enum ScreenDisplay {
     CurrentParkStatus,
