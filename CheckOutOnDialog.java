@@ -93,7 +93,8 @@ public class CheckOutOnDialog extends JDialog implements ActionListener {
 					throw new IllegalArgumentException();
 
 			}catch (ParseException e1) {
-				throw new IllegalArgumentException("Invalid Date Format", e1);
+				JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+				closeStatus = CANCEL;
 			}
 
 		}
