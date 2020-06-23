@@ -115,11 +115,12 @@ public class ReservationTentDialog extends JDialog implements ActionListener {
                 d2 = df.parse(txtDateCheckout.getText());
                 gregTemp.setTime(d2);
                 tent.setEstimatedCheckOut(gregTemp);
-                 if (tent.getCheckIn().after(tent.getEstimatedCheckOut()))
+                if (tent.getCheckIn().after(tent.getEstimatedCheckOut()))
                     throw new IllegalArgumentException("Estimated Checkout cant be before Check in.");
 
             } catch (ParseException e1) {
-                throw new IllegalArgumentException("Invalid Date Format", e1);
+                JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                closeStatus = CANCEL;
 //                  Do some thing good, what I am not sure.
             }
 
