@@ -1,4 +1,4 @@
-package project3;
+package Project2;
 
 
 import javax.swing.*;
@@ -19,6 +19,7 @@ public class CheckOutOnDialog extends JDialog implements ActionListener {
 	private JButton cancelButton;
 	private int closeStatus;
 	private CampSite campSite;
+	private CampSite temp;
 
 	static final int OK = 0;
 	static final int CANCEL = 1;
@@ -40,10 +41,10 @@ public class CheckOutOnDialog extends JDialog implements ActionListener {
 		closeStatus = CANCEL;
 		setSize(300,100);
 
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		//setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-
+		dateFormat.setLenient(false);
         txtDate = new JTextField(dateFormat.format(campSite.
 				getEstimatedCheckOut().getTime()),30);
 
@@ -81,15 +82,60 @@ public class CheckOutOnDialog extends JDialog implements ActionListener {
 			// save the information in the object
 			closeStatus = OK;
 			SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			df.setLenient(false);
 			GregorianCalendar gTemp = new GregorianCalendar();
 
 			Date d = null;
+			int count = 0;
 			try {
+				String dateIn = txtDate.getText();
+				dateIn = dateIn.substring(dateIn.lastIndexOf('/') + 1);
+				int yearIn = Integer.parseInt(dateIn);
+				if (dateIn.length() != 4 ) {
+					JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+					closeStatus = CANCEL;
+					count += 1;
+				}
+				else {
+					for (int i = 0; i < dateIn.length(); i++) {
+						if (!Character.isDigit(dateIn.charAt(i)) && count < 1) {
+							JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+							closeStatus = CANCEL;
+							count += 1;
+						}
+					}
+				}
+
+				String dateOut = txtDate.getText();
+				dateOut = dateOut.substring(dateOut.lastIndexOf('/') + 1);
+				int yearOut = Integer.parseInt(dateOut);
+				if (dateOut.length() != 4 && count < 1) {
+					JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+					closeStatus = CANCEL;
+					count += 1;
+				}
+				else {
+					for (int i = 0; i < dateOut.length(); i++) {
+						if (!Character.isDigit(dateOut.charAt(i)) && count < 1) {
+							JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+							closeStatus = CANCEL;
+							count += 1;
+						}
+					}
+				}
 				d = df.parse(txtDate.getText());
 				gTemp.setTime(d);
-				campSite.setActualCheckOut(gTemp);
+				temp = campSite;
+				temp.setActualCheckOut(gTemp);
+				if (temp.actualCheckOut.before(campSite.checkIn) && count < 1)
+					JOptionPane.showMessageDialog(getParent(), "Estimated Checkout cant be before Check in.");
+					closeStatus = CANCEL;
 
-			} catch (ParseException e1) {
+			}catch (ParseException | NullPointerException | NumberFormatException e1) {
+				if(count < 1) {
+					JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+					closeStatus = CANCEL;
+				}
 			}
 
 		}

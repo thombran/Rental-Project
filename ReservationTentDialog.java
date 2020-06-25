@@ -1,4 +1,4 @@
-package project3;
+package Project2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +22,7 @@ public class ReservationTentDialog extends JDialog implements ActionListener {
     public static final int OK = 0;
     public static final int CANCEL = 1;
 
+
     /*********************************************************
      Instantiate a Custom Dialog as 'modal' and wait for the
      user to provide data and click on a button.
@@ -40,7 +41,7 @@ public class ReservationTentDialog extends JDialog implements ActionListener {
         setSize(400,200);
 
         // prevent user from closing window
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        //setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         // instantiate and display two text fields
         txtGuestName = new JTextField("Judy",30);
@@ -50,6 +51,7 @@ public class ReservationTentDialog extends JDialog implements ActionListener {
 
         Calendar currentDate = Calendar.getInstance();
         SimpleDateFormat formatter= new SimpleDateFormat("MM/dd/yyyy"); //format it as per your requirement
+        formatter.setLenient(false);
         String dateNow = formatter.format(currentDate.getTime());
         currentDate.add(Calendar.DATE, 1);
         String datetomorrow = formatter.format(currentDate.getTime());
@@ -100,10 +102,32 @@ public class ReservationTentDialog extends JDialog implements ActionListener {
             // save the information in the object
             closeStatus = OK;
             SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
+            df.setLenient(false);
             Date d1 = null;
             Date d2 = null;
+
+            int count = 0;
             try {
+                String dateIn = txtDateCheckin.getText();
+                dateIn = dateIn.substring(dateIn.lastIndexOf('/') + 1);
+                String dateOut = txtDateCheckout.getText();
+                dateOut = dateOut.substring(dateOut.lastIndexOf('/') + 1);
+
+                if (dateIn.length() != 4 || dateOut.length() != 4) {
+                    JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                    closeStatus = CANCEL;
+                    count += 1;
+                }
+                else {
+                    for (int i = 0; i < dateIn.length(); i++) {
+                        if ((!Character.isDigit(dateIn.charAt(i)) || !Character.isDigit(dateOut.charAt(i))) && count < 1) {
+                            JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                            closeStatus = CANCEL;
+                            count += 1;
+                        }
+                    }
+                }
+
                 GregorianCalendar gregTemp = new GregorianCalendar();
                 d1 = df.parse(txtDateCheckin.getText());
                 gregTemp.setTime(d1);
@@ -113,13 +137,41 @@ public class ReservationTentDialog extends JDialog implements ActionListener {
                 d2 = df.parse(txtDateCheckout.getText());
                 gregTemp.setTime(d2);
                 tent.setEstimatedCheckOut(gregTemp);
+                if (tent.getCheckIn().after(tent.getEstimatedCheckOut())) {
+                    JOptionPane.showMessageDialog(getParent(), "Estimated Checkout cant be before Check in.");
+                    closeStatus = CANCEL;
+                }
+
 
             } catch (ParseException e1) {
-//                  Do some thing good, what I am not sure.
+                if (count < 1) {
+                    JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                    closeStatus = CANCEL;
+                }
             }
+            try {
+                String name = txtGuestName.getText();
+                for (char c : name.toCharArray()) {
+                    if ((!Character.isLetter(c) && c != ' ' && c != '.') && count < 1) {
+                        JOptionPane.showMessageDialog(getParent(), "Invalid name!");
+                        closeStatus = CANCEL;
+                    }
+                }
+                if (closeStatus != CANCEL)
+                    tent.setGuestName(txtGuestName.getText());
 
-            tent.setGuestName(txtGuestName.getText());
-            tent.setNumberOfTenters(Integer.parseInt(txtNumberOfTenters.getText()));
+                tent.setNumberOfTenters(Integer.parseInt(txtNumberOfTenters.getText()));
+                if (tent.getNumberOfTenters() <= 0 && count < 1) {
+                    JOptionPane.showMessageDialog(getParent(), "Must have at least 1 Tenter");
+                    closeStatus = CANCEL;
+                }
+            }
+            catch (Exception e1) {
+                if (count < 1) {
+                    JOptionPane.showMessageDialog(getParent(), "Invalid number of tenters!");
+                    closeStatus = CANCEL;
+                }
+            }
         }
 
         // make the dialog disappear

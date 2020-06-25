@@ -1,4 +1,4 @@
-package project3;
+package Project2;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -6,7 +6,6 @@ import java.util.GregorianCalendar;
 public class RV extends CampSite {
 
     private int power;
-    private boolean exceeds;
 
     public RV() {
     }
@@ -34,12 +33,9 @@ public class RV extends CampSite {
                     cost += 20;
                     gTemp.add(Calendar.DATE, -1);
                 }
-                if(cost > 500)
-                    exceeds = true;
                 return cost;
             }
         }
-        // makes a copy... why is that important?
         GregorianCalendar gTemp = (GregorianCalendar) estimatedCheckOut.clone();
         while (gTemp.after(checkIn)) {
             cost += 20;

@@ -7,6 +7,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class ListModel extends AbstractTableModel {
 
@@ -20,6 +24,9 @@ public class ListModel extends AbstractTableModel {
 
     private String[] columnNamesforCheckouts = {"Guest Name",
             "Check in Date", "ACTUAL Check out Date ", "Estimated Checkout", " Final Cost"};
+
+    private String[] columnNamesExceedScreen = {"Guest Name", "Est. Cost",
+            "Check in Date", "EST. Check out Date ",};
 
     private DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -82,6 +89,8 @@ public class ListModel extends AbstractTableModel {
                 return columnNamesCurrentPark[col];
             case CheckOutGuest:
                 return columnNamesforCheckouts[col];
+            case ExceedsCost:
+                return columnNamesExceedScreen[col];
             default:
                 return columnNamesCurrentPark[col];
         }
@@ -94,6 +103,8 @@ public class ListModel extends AbstractTableModel {
                 return columnNamesCurrentPark.length;
             case CheckOutGuest:
                 return columnNamesforCheckouts.length;
+            case ExceedsCost:
+                return columnNamesExceedScreen.length;
             default:
                 return columnNamesCurrentPark.length;
         }
@@ -111,6 +122,8 @@ public class ListModel extends AbstractTableModel {
                 return currentParkScreen(row, col);
             case CheckOutGuest:
                 return checkOutScreen(row, col);
+            case ExceedsCost:
+                return exceedsScreen(row, col);
             default:
                 return currentParkScreen(row, col);
         }
@@ -174,6 +187,30 @@ public class ListModel extends AbstractTableModel {
             case 4:
                 return (fileredListCampSites.
                         get(row).getCost());
+
+            default:
+                throw new RuntimeException("Row,col out of range: " + row + " " + col);
+        }
+    }
+
+    private Object exceedsScreen(int row, int col) {
+        switch (col) {
+            case 0:
+                return (fileredListCampSites.get(row).guestName);
+
+            case 1:
+                return (fileredListCampSites.get(row).getCost());
+
+            case 2:
+                return (formatter.format(fileredListCampSites.get(row).checkIn.getTime()));
+
+            case 3:
+                if (fileredListCampSites.get(row).estimatedCheckOut == null)
+                    return "-";
+
+                return (formatter.format(fileredListCampSites.get(row).estimatedCheckOut.
+                        getTime()));
+
 
             default:
                 throw new RuntimeException("Row,col out of range: " + row + " " + col);
@@ -281,4 +318,3 @@ public class ListModel extends AbstractTableModel {
         }
     }
 }
-

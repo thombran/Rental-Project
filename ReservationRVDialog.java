@@ -1,4 +1,4 @@
-package project3;
+package Project2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,7 +40,7 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
         setSize(500,200);
 
         // prevent user from closing window
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        //setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         // instantiate and display two text fields
         txtGuestName = new JTextField("Roger",30);
@@ -50,6 +50,7 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
 
         Calendar currentDate = Calendar.getInstance();
         SimpleDateFormat formatter= new SimpleDateFormat("MM/dd/yyyy"); //format it as per your requirement
+        formatter.setLenient(false);
         String dateNow = formatter.format(currentDate.getTime());
         currentDate.add(Calendar.DATE, 1);
         String datetomorrow = formatter.format(currentDate.getTime());
@@ -97,28 +98,87 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
             // save the information in the object
             closeStatus = OK;
             SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
+            df.setLenient(false);
 
             Date d1 = null;
             Date d2 = null;
-            try {
-                GregorianCalendar gregTemp = new GregorianCalendar();
-                d1 = df.parse(txtDateCheckin.getText());
-                gregTemp.setTime(d1);
-                rv.setCheckIn(gregTemp);
 
-                gregTemp = new GregorianCalendar();
-                d2 = df.parse(txtDateCheckout.getText());
-                gregTemp.setTime(d2);
-                rv.setEstimatedCheckOut(gregTemp);
+            int count = 0;
+            try {
+
+                String dateIn = txtDateCheckin.getText();
+                dateIn = dateIn.substring(dateIn.lastIndexOf('/') + 1);
+                String dateOut = txtDateCheckout.getText();
+                dateOut = dateOut.substring(dateOut.lastIndexOf('/') + 1);
+
+                if ((dateIn.length() != 4 || dateOut.length() !=4)) {
+                    JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                    closeStatus = CANCEL;
+                    count += 1;
+                }
+                else {
+                    for (int i = 0; i < dateIn.length(); i++) {
+                        if ((!Character.isDigit(dateIn.charAt(i)) || !Character.isDigit(dateOut.charAt(i))) && count < 1) {
+                            JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                            closeStatus = CANCEL;
+                            count += 1;
+                        }
+                    }
+                }
+
+                    GregorianCalendar gregTemp = new GregorianCalendar();
+                    d1 = df.parse(txtDateCheckin.getText());
+                    gregTemp.setTime(d1);
+                    rv.setCheckIn(gregTemp);
+
+                    gregTemp = new GregorianCalendar();
+                    d2 = df.parse(txtDateCheckout.getText());
+                    gregTemp.setTime(d2);
+                    rv.setEstimatedCheckOut(gregTemp);
+
+
+                if (rv.getCheckIn().after(rv.getEstimatedCheckOut()) && count < 1) {
+                    JOptionPane.showMessageDialog(getParent(), "Estimated Checkout cant be before Check in.");
+                    closeStatus = CANCEL;
+                }
 
             } catch (ParseException e1) {
-//                  Do some thing good, what I am not sure.
+                if (count < 1) {
+                    JOptionPane.showMessageDialog(getParent(), "Incorrect Date!");
+                    closeStatus = CANCEL;
+                }
             }
 
-            rv.setGuestName(txtGuestName.getText());
-            rv.setPower(Integer.parseInt(txtPowerSupplied.getText()));
+            String name = txtGuestName.getText();
+            for (char c : name.toCharArray()) {
+                if ((!Character.isLetter(c) && c != ' ' && c != '.') && count < 1) {
+                    JOptionPane.showMessageDialog(getParent(), "Invalid name!");
+                    closeStatus = CANCEL;
+                }
+            }
+            if (closeStatus != CANCEL)
+                rv.setGuestName(txtGuestName.getText());
+            try {
+                String power = txtPowerSupplied.getText();
+                for (int i = 0; i < power.length(); i++) {
+                    if (!Character.isDigit(power.charAt(i)) && count < 1) {
+                        JOptionPane.showMessageDialog(getParent(), "Invalid power level");
+                        closeStatus = CANCEL;
+                        count += 1;
+                    }
+                }
+                if (closeStatus != CANCEL)
+                    rv.setPower(Integer.parseInt(txtPowerSupplied.getText()));
+            }
+            catch (NumberFormatException e1) {
+                if (count < 1) {
+                    JOptionPane.showMessageDialog(getParent(), "Invalid power level");
+                    closeStatus = CANCEL;
+                }
+            }
         }
+
+
 
         // make the dialog disappear
         dispose();
