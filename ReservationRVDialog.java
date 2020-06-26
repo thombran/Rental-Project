@@ -126,15 +126,15 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
                     }
                 }
 
-                    GregorianCalendar gregTemp = new GregorianCalendar();
-                    d1 = df.parse(txtDateCheckin.getText());
-                    gregTemp.setTime(d1);
-                    rv.setCheckIn(gregTemp);
+                GregorianCalendar gregTemp = new GregorianCalendar();
+                d1 = df.parse(txtDateCheckin.getText());
+                gregTemp.setTime(d1);
+                rv.setCheckIn(gregTemp);
 
-                    gregTemp = new GregorianCalendar();
-                    d2 = df.parse(txtDateCheckout.getText());
-                    gregTemp.setTime(d2);
-                    rv.setEstimatedCheckOut(gregTemp);
+                gregTemp = new GregorianCalendar();
+                d2 = df.parse(txtDateCheckout.getText());
+                gregTemp.setTime(d2);
+                rv.setEstimatedCheckOut(gregTemp);
 
 
                 if (rv.getCheckIn().after(rv.getEstimatedCheckOut()) && count < 1) {
@@ -148,6 +148,11 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
                     closeStatus = CANCEL;
                 }
             }
+        try {
+            if (txtGuestName.getText().length() == 0){
+                JOptionPane.showMessageDialog(getParent(), "Invalid name!");
+                closeStatus = CANCEL;
+            }
 
             String name = txtGuestName.getText();
             for (char c : name.toCharArray()) {
@@ -158,7 +163,7 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
             }
             if (closeStatus != CANCEL)
                 rv.setGuestName(txtGuestName.getText());
-            try {
+
                 String power = txtPowerSupplied.getText();
                 for (int i = 0; i < power.length(); i++) {
                     if (!Character.isDigit(power.charAt(i)) && count < 1) {
