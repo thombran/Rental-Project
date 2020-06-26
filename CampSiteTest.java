@@ -9,15 +9,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+
 public class CampSiteTest {
-    // Testing the basic RV() function no parameters
+
+
+
+
+
+    // Testing the basic new CampSite RV() function no parameters
     @Test
-    public void testRV(){
+    public void testCampRV(){
         CampSite d = new RV();
     }
-    // Testing the RV function with correct parameters
+    // Testing the Campsite RV function with correct parameters
     @Test
-    public void testRV1(){
+    public void testCampRV1(){
         GregorianCalendar checkIn = new GregorianCalendar();
         GregorianCalendar estCheckOut = new GregorianCalendar();
         GregorianCalendar actCheckOut = new GregorianCalendar();
@@ -28,9 +34,9 @@ public class CampSiteTest {
         CampSite d = new RV("Test Name",checkIn, estCheckOut,actCheckOut,1500);
     }
 
-    // Testing correct getCost method under with the RV Object
+    // Testing correct getCost method under with the Campsite Object
     @Test
-    public void testRVCost(){
+    public void testCampRVCost(){
 
         GregorianCalendar checkIn = new GregorianCalendar();
         GregorianCalendar estCheckOut = new GregorianCalendar();
@@ -42,9 +48,9 @@ public class CampSiteTest {
         CampSite d = new RV("Test Name",checkIn, estCheckOut,actCheckOut,1500);
         assertTrue(d.getCost() == 620.0);
     }
-    // Testing incorrect getCost method under with the RV Object
+    // Testing incorrect RV getCost method  with the Campsite Object
     @Test
-    public void testRVCost2(){
+    public void testCampRVCost2(){
 
         GregorianCalendar checkIn = new GregorianCalendar();
         GregorianCalendar estCheckOut = new GregorianCalendar();
@@ -53,15 +59,15 @@ public class CampSiteTest {
         estCheckOut.set(2020,01,30);
         actCheckOut.set(2020,01,01);
 
+
         CampSite d = new RV("Test Name",checkIn, estCheckOut,actCheckOut,1500);
         assertFalse(d.getCost() == 600.0);
 
-
     }
 
-    // Testing the RV toString function
+    // Testing the CampSite RV toString function
     @Test
-    public void testRVString(){
+    public void testCampRVtoString(){
         GregorianCalendar checkIn = new GregorianCalendar();
         GregorianCalendar estCheckOut = new GregorianCalendar();
         GregorianCalendar actCheckOut = new GregorianCalendar();
@@ -73,17 +79,28 @@ public class CampSiteTest {
         d.toString();
     }
 
+    @Test
+    public void testRV(){
+        RV d = new RV();
+    }
+    // Test rv getPower method for correct number.
+    @Test
+    public void testRVgetPower(){
+        RV d = new RV();
+        d.setPower(1000);
+        assertEquals(d.getPower(),1000);
+    }
 
 
 
     // Testing the basic Tent() function no parameters
     @Test
-    public void testCamp(){
+    public void testCampTent(){
         CampSite d = new Tent();
     }
     // Testing the Tent function with correct parameters
     @Test
-    public void testTent1(){
+    public void testCamptTent1(){
         GregorianCalendar checkIn = new GregorianCalendar();
         GregorianCalendar estCheckOut = new GregorianCalendar();
         GregorianCalendar actCheckOut = new GregorianCalendar();
@@ -96,7 +113,7 @@ public class CampSiteTest {
 
     // Testing correct getCost method under with the Tent Object
     @Test
-    public void testTentCost(){
+    public void testCamptTentCost(){
 
         GregorianCalendar checkIn = new GregorianCalendar();
         GregorianCalendar estCheckOut = new GregorianCalendar();
@@ -110,7 +127,7 @@ public class CampSiteTest {
     }
     // Testing incorrect getCost method under with the Tent Object
     @Test
-    public void testTentCost2(){
+    public void testCampTentCost2(){
 
         GregorianCalendar checkIn = new GregorianCalendar();
         GregorianCalendar estCheckOut = new GregorianCalendar();
@@ -123,9 +140,9 @@ public class CampSiteTest {
         assertFalse(d.getCost() == 500.0);
     }
 
-    // Testing the RV toString function
+    // Testing the tent toString function
     @Test
-    public void testTenttoString(){
+    public void testCamptTenttoString(){
         GregorianCalendar checkIn = new GregorianCalendar();
         GregorianCalendar estCheckOut = new GregorianCalendar();
         GregorianCalendar actCheckOut = new GregorianCalendar();
@@ -135,6 +152,18 @@ public class CampSiteTest {
 
         CampSite d = new Tent("Test Name",checkIn, estCheckOut,actCheckOut,2);
         d.toString();
+    }
+
+    @Test
+    public void testTent(){
+        Tent d = new Tent();
+    }
+    // Test rv getPower method for correct number.
+    @Test
+    public void testTentgetTenters(){
+        Tent d = new Tent();
+        d.setNumberOfTenters(5);
+        assertEquals(d.getNumberOfTenters(),5);
     }
 
 
@@ -149,18 +178,16 @@ public class CampSiteTest {
         ScreenDisplay display = ScreenDisplay.CurrentParkStatus;
     }
 
-    @Test
-    public void testgetColumnName(){
-        String d = "";
-
-
-
-    }
-
+//    @Test
+//    public void testgetColumnName(){
+//        String d = "";
+//
+//    
+//
+//    }
     @Test
     public void testScreenUpdate() {
         ListModel list = new ListModel();
     }
 
 }
-
