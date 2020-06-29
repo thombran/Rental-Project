@@ -30,6 +30,10 @@ public class ListModel extends AbstractTableModel {
 
     private DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
+    public ScreenDisplay getDisplay() {
+        return display;
+    }
+
     public ListModel() {
         display = ScreenDisplay.CurrentParkStatus;
         listCampSites = new ArrayList<>();
@@ -77,7 +81,7 @@ public class ListModel extends AbstractTableModel {
 
                 break;
             default:
-                throw new RuntimeException("upDate is in undefined state: " + display);
+                throw new RuntimeException("upDate is in undefined state: " + display); //TODO How to hit?
         }
         fireTableStructureChanged();
     }
@@ -92,7 +96,7 @@ public class ListModel extends AbstractTableModel {
             case ExceedsCost:
                 return columnNamesExceedScreen[col];
             default:
-                return columnNamesCurrentPark[col];
+                return columnNamesCurrentPark[col]; //TODO How do we hit this default case? I dont think there is a way
         }
     }
 
@@ -106,7 +110,7 @@ public class ListModel extends AbstractTableModel {
             case ExceedsCost:
                 return columnNamesExceedScreen.length;
             default:
-                return columnNamesCurrentPark.length;
+                return columnNamesCurrentPark.length; //TODO Again how do we test default if we cant change display to incorrect value
         }
     }
 
@@ -125,7 +129,7 @@ public class ListModel extends AbstractTableModel {
             case ExceedsCost:
                 return exceedsScreen(row, col);
             default:
-                return currentParkScreen(row, col);
+                return currentParkScreen(row, col); //TODO How to reach default case?
         }
     }
 
