@@ -156,7 +156,7 @@ public class ReservationTentDialog extends JDialog implements ActionListener {
                 }
                 String name = txtGuestName.getText();
                 for (char c : name.toCharArray()) {
-                    if ((!Character.isLetter(c) && c != ' ' && c != '.') && count < 1) {
+                    if (((!Character.isLetter(c) && c != ' ' && c != '.') && count < 1) && closeStatus != CANCEL) {
                         JOptionPane.showMessageDialog(getParent(), "Invalid name!");
                         closeStatus = CANCEL;
                     }

@@ -174,7 +174,8 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
                                 "\n for camping with us and the price is:  " +
                                 unit.getCost() +
                                 " dollars");
-                DList.upDate(index, unit);
+                if (dialog.getCloseStatus() != CheckOutOnDialog.CANCEL)
+                    DList.upDate(index, unit);
             }
         }
     }
