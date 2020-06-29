@@ -81,7 +81,7 @@ public class ListModel extends AbstractTableModel {
 
                 break;
             default:
-                throw new RuntimeException("upDate is in undefined state: " + display); //TODO How to hit?
+                throw new RuntimeException("upDate is in undefined state: " + display);
         }
         fireTableStructureChanged();
     }
@@ -96,7 +96,7 @@ public class ListModel extends AbstractTableModel {
             case ExceedsCost:
                 return columnNamesExceedScreen[col];
             default:
-                return columnNamesCurrentPark[col]; //TODO How do we hit this default case? I dont think there is a way
+                return columnNamesCurrentPark[col];
         }
     }
 
@@ -110,7 +110,7 @@ public class ListModel extends AbstractTableModel {
             case ExceedsCost:
                 return columnNamesExceedScreen.length;
             default:
-                return columnNamesCurrentPark.length; //TODO Again how do we test default if we cant change display to incorrect value
+                return columnNamesCurrentPark.length;
         }
     }
 
@@ -129,7 +129,7 @@ public class ListModel extends AbstractTableModel {
             case ExceedsCost:
                 return exceedsScreen(row, col);
             default:
-                return currentParkScreen(row, col); //TODO How to reach default case?
+                return currentParkScreen(row, col);
         }
     }
 

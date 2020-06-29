@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -286,6 +287,17 @@ public class CampSiteTest {
     }
 
     @Test
+    public void testGetColumnNameDefaultCase() {
+        ListModel l = new ListModel();
+        try {
+            l.setDisplay(ScreenDisplay.Default);
+        }
+        catch (RuntimeException e) {
+            Assert.assertEquals(l.getColumnName(1), "Est. Cost");
+        }
+    }
+
+    @Test
     public void testGetColumnCountCurrentParkStatus() {
         ListModel l = new ListModel();
         l.setDisplay(ScreenDisplay.CurrentParkStatus);
@@ -307,6 +319,17 @@ public class CampSiteTest {
     }
 
     @Test
+    public void testGetColumnCountDefaultCase() {
+        ListModel l = new ListModel();
+        try {
+            l.setDisplay(ScreenDisplay.Default);
+        }
+        catch (RuntimeException e) {
+            Assert.assertEquals(6,l.getColumnCount());
+        }
+    }
+
+    @Test
     public void testGetRowCount() {
         ListModel l = new ListModel();
         l.setDisplay(ScreenDisplay.CurrentParkStatus);
@@ -320,6 +343,17 @@ public class CampSiteTest {
         ListModel l = new ListModel();
         l.setDisplay(ScreenDisplay.CurrentParkStatus);
         Assert.assertEquals("12/20/2019", l.getValueAt(0,2));
+    }
+
+    @Test
+    public void testGetValueAtDefaultCase() {
+        ListModel l = new ListModel();
+        try {
+            l.setDisplay(ScreenDisplay.Default);
+        }
+        catch (RuntimeException e) {
+            Assert.assertEquals(l.getValueAt(0, 0), "RV1");
+        }
     }
 
     @Test
@@ -481,4 +515,36 @@ public class CampSiteTest {
         Assert.assertEquals("Test RV",l.getValueAt(0,0));
     }
 
+    @Test
+    public void testSaveAndLoadDatabase() throws ParseException {
+        ListModel l = new ListModel();
+        ListModel l1 = new ListModel();
+        l.setDisplay(ScreenDisplay.CheckOutGuest);
+        l1.setDisplay(ScreenDisplay.CheckOutGuest);
+        GregorianCalendar g1 = new GregorianCalendar();
+        GregorianCalendar g2 = new GregorianCalendar();
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        Date d1 = formatter.parse("12/20/2019");
+        g1.setTime(d1);
+        Date d2 = formatter.parse("6/22/2020");
+        g2.setTime(d2);
+        RV r = new RV("Test RV",g1,g2,g2,1500);
+        l.add(r);
+        l.saveDatabase("Test DB");
+        l1.loadDatabase("Test DB");
+        Assert.assertEquals(l.getValueAt(4, 0), l1.getValueAt(4, 0));
+    }
+
+    @Test (expected = RuntimeException.class)
+    public void testSaveDatabaseException() {
+        ListModel l = new ListModel();
+        l.saveDatabase("!@()&$(#*$");
+    }
+
+    @Test (expected = RuntimeException.class)
+    public void testLoadDatabaseException() {
+        ListModel l = new ListModel();
+        l.saveDatabase("Test");
+        l.loadDatabase(")#(@!#&*(#");
+    }
 }
