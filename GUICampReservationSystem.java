@@ -1,4 +1,4 @@
-package project3;
+package Project2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -162,20 +162,20 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
             }
         }
 
-        if (checkOutItem == e.getSource()) {
+        if (checkOutItem == e.getSource() && DList.getDisplay() != ScreenDisplay.CheckOutGuest) {
             int index = jTable.getSelectedRow();
             if (index != -1) {
                 GregorianCalendar dat = new GregorianCalendar();
-
                 CampSite unit = DList.get(index);
                 CheckOutOnDialog dialog = new CheckOutOnDialog(this, unit);
-
+                if (dialog.getCloseStatus() != CheckOutOnDialog.CANCEL)
                 JOptionPane.showMessageDialog(null,
                         "Be sure to thank " + unit.getGuestName() +
-                        "\n for camping with us and the price is:  " +
-                        unit.getCost() +
-                        " dollars");
-                DList.upDate(index, unit);
+                                "\n for camping with us and the price is:  " +
+                                unit.getCost() +
+                                " dollars");
+                if (dialog.getCloseStatus() != CheckOutOnDialog.CANCEL)
+                    DList.upDate(index, unit);
             }
         }
     }
