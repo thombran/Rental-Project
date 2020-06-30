@@ -162,7 +162,7 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
             }
         }
 
-        if (checkOutItem == e.getSource()) {
+        if (checkOutItem == e.getSource() && DList.getDisplay() != ScreenDisplay.CheckOutGuest) {
             int index = jTable.getSelectedRow();
             if (index != -1) {
                 GregorianCalendar dat = new GregorianCalendar();
