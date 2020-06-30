@@ -127,9 +127,10 @@ public class CheckOutOnDialog extends JDialog implements ActionListener {
 				gTemp.setTime(d);
 				temp = campSite;
 				temp.setActualCheckOut(gTemp);
-				if (temp.actualCheckOut.before(campSite.checkIn) && count < 1){
+				if (temp.actualCheckOut.before(campSite.checkIn) && count < 1) {
 					JOptionPane.showMessageDialog(getParent(), "Estimated Checkout cant be before Check in.");
-					closeStatus = CANCEL;}
+					closeStatus = CANCEL;
+				}
 
 			}catch (ParseException | NullPointerException | NumberFormatException e1) {
 				if(count < 1) {

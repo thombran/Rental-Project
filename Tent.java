@@ -4,9 +4,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Tent extends CampSite {
-    /** Integer used to count the number of tenters on campsite */
+    /*
+     * Integer used to count the number of tenters on campsite
+     */
     private int numberOfTenters;
-
     /******************************************************************
      * Default constructor that sets up a Tent object with no parameters.
      *****************************************************************/
@@ -15,6 +16,7 @@ public class Tent extends CampSite {
 
     /******************************************************************
      * A constructor that accepts 5 parameters to represent a Tent object
+     *
      * @param guestName Name of the customer
      * @param checkIn The date of the check in
      * @param estimatedCheckOut Estimated date of check out
@@ -32,6 +34,7 @@ public class Tent extends CampSite {
 
     /******************************************************************
      * Getter method for tenters
+     *
      * @return Returns the number of tenters on site
      ******************************************************************/
     public int getNumberOfTenters() {
@@ -40,6 +43,7 @@ public class Tent extends CampSite {
 
     /******************************************************************
      * Sets the Tent object with specified number of tenters
+     *
      * @param numberOfTenters number of tenters going to be on site
      ******************************************************************/
     public void setNumberOfTenters(int numberOfTenters) {
@@ -48,6 +52,7 @@ public class Tent extends CampSite {
 
     /******************************************************************
      * Gets the cost of the stay for the tenters
+     *
      * @return returns a double cost for the price of the stay
      *****************************************************************/
     @Override
@@ -79,13 +84,12 @@ public class Tent extends CampSite {
 
         return cost;
     }
-
-    /******************************************************************
-     * Overrides the default toString method to print out the tenters
-     * information and goes into the super class CampSite for the
-     * rest of the toString
+    /**
+     * Overrides the default toString method to print out the tenters information
+     * and goes into the super class CampSite for the rest of the toString
+     *
      * @return Returns a string in the form of the aforementioned format
-     *****************************************************************/
+     */
     @Override
     public String toString() {
         return "TentOnly{" +
