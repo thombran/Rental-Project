@@ -7,22 +7,58 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
+/******************************************************************
+ * Program that helps camp ground owners to manage a inventory of campers
+ * including tenters and rv users
+ *
+ * @author Brandon and Dylan
+ * @version Summer 2020
+ *******************************************************************/
 public class ListModel extends AbstractTableModel {
-
+    /** Private ArrayList used to list the campsite objects */
     private ArrayList<CampSite> listCampSites;
+
+    /** Private ArrayList used to filter Campsite objects */
     private ArrayList<CampSite> fileredListCampSites;
 
+    /** Private Display variable to set a default ScreenDisplay to CurrentParkStatus */
     private ScreenDisplay display = ScreenDisplay.CurrentParkStatus;
 
+    /** Private Array used to set the names of the columns for currentPark screen */
     private String[] columnNamesCurrentPark = {"Guest Name", "Est. Cost",
             "Check in Date", "EST. Check out Date ", "Max Power (watts)", "Num of Tenters"};
 
+    /** Private Array used to set the names of the columns for the checkOuts screen */
     private String[] columnNamesforCheckouts = {"Guest Name",
             "Check in Date", "ACTUAL Check out Date ", "Estimated Checkout", " Final Cost"};
 
+    /** Private Array used to set the names of the columns for the Exceeds screen */
+    private String[] columnNamesExceedScreen = {"Guest Name", "Est. Cost",
+            "Check in Date", "EST. Check out Date ",};
+
+    /** SimpleDate formatter used to set the date to MM/dd/yyyy */
     private DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
+    /******************************************************************
+     * Method used to bring up the display
+     * @return Returns the default display CurrentParkStatus
+     *******************************************************************/
+    public ScreenDisplay getDisplay() {
+        return display;
+    }
+
+    /******************************************************************
+     * Method used to set the display to a default one
+     * Create a new ArrayList called listCampSites
+     * Create new ArrayList called fileredListCampSites
+     * Update the screen to show the default display
+     * Create basic list of tents and Rv objects to display
+     *******************************************************************/
     public ListModel() {
         display = ScreenDisplay.CurrentParkStatus;
         listCampSites = new ArrayList<>();
@@ -31,11 +67,20 @@ public class ListModel extends AbstractTableModel {
         createList();
     }
 
+    /******************************************************************
+     * Method used to to set the display screen to selected parameter
+     * @param selected Parameter used for what screen is desired
+     *******************************************************************/
     public void setDisplay(ScreenDisplay selected) {
         display = selected;
         UpdateScreen();
     }
 
+    /******************************************************************
+     * Method used to switch the display screen to whatever one is selected
+     * 3 different screens to show: CurrentParkStatus, CheckOutGuest and ExceedsCost
+     * Each screen has different filtered list that is displayed
+     *******************************************************************/
     private void UpdateScreen() {
         switch (display) {
             case CurrentParkStatus:
@@ -66,7 +111,7 @@ public class ListModel extends AbstractTableModel {
                         .filter(n -> n.getClass() == RV.class || n.getClass() == Tent.class)
                         .filter(RV ->(RV.getCost() > 500) || RV.getClass() == Tent.class && RV.getCost() > 250)
                         .collect(Collectors.toList());
-                        Collections.sort(fileredListCampSites, (n2, n1) -> Double.compare(n1.getCost(),n2.getCost()));
+                Collections.sort(fileredListCampSites, (n2, n1) -> Double.compare(n1.getCost(),n2.getCost()));
 
                 break;
             default:
@@ -75,6 +120,12 @@ public class ListModel extends AbstractTableModel {
         fireTableStructureChanged();
     }
 
+    /******************************************************************
+     * Overrides current column displayed and replaces it with desired
+     * integer parameter for column
+     * @param col integer used to determine columns needed
+     * @return ArrayList with the integer col desired
+     *******************************************************************/
     @Override
     public String getColumnName(int col) {
         switch (display) {
@@ -82,11 +133,17 @@ public class ListModel extends AbstractTableModel {
                 return columnNamesCurrentPark[col];
             case CheckOutGuest:
                 return columnNamesforCheckouts[col];
+            case ExceedsCost:
+                return columnNamesExceedScreen[col];
             default:
                 return columnNamesCurrentPark[col];
         }
     }
 
+    /******************************************************************
+     * Method used to get the amount of columns needed for the screen display
+     * @return Returns the desired ArrayList.length for amount of columns needed
+     *******************************************************************/
     @Override
     public int getColumnCount() {
         switch (display) {
@@ -94,16 +151,29 @@ public class ListModel extends AbstractTableModel {
                 return columnNamesCurrentPark.length;
             case CheckOutGuest:
                 return columnNamesforCheckouts.length;
+            case ExceedsCost:
+                return columnNamesExceedScreen.length;
             default:
                 return columnNamesCurrentPark.length;
         }
     }
 
+    /******************************************************************
+     * Overrides the other instance of getrowcount that was already in use
+     * @return number of items in the arrayList
+     *******************************************************************/
     @Override
     public int getRowCount() {
-        return fileredListCampSites.size();     // returns number of items in the arraylist
+        return fileredListCampSites.size();
     }
 
+    /******************************************************************
+     * Overrides the current screens row and columns with int parameters
+     * for row and col
+     * @param row integer used to determine rows
+     * @param col integer used to determine columns
+     * @return Returns the object with integer row and col inputted
+     *******************************************************************/
     @Override
     public Object getValueAt(int row, int col) {
         switch (display) {
@@ -111,11 +181,21 @@ public class ListModel extends AbstractTableModel {
                 return currentParkScreen(row, col);
             case CheckOutGuest:
                 return checkOutScreen(row, col);
+            case ExceedsCost:
+                return exceedsScreen(row, col);
             default:
                 return currentParkScreen(row, col);
         }
     }
 
+    /******************************************************************
+     * Private method used to determine the amount of rows and columns
+     * for the currentParkScreen
+     * @param row integer parameter determining the amount of rows
+     * @param col integer parameter determining the amount of columns
+     * @return returns the currentParkScreen for the correct amount of
+     * rows and columns determined by the parameters
+     *******************************************************************/
     private Object currentParkScreen(int row, int col) {
         switch (col) {
             case 0:
@@ -154,6 +234,14 @@ public class ListModel extends AbstractTableModel {
         }
     }
 
+    /******************************************************************
+     * Private method used to determine the amount of rows and columns
+     * for the checkOutScreen
+     * @param row integer parameter determining the amount of rows
+     * @param col integer parameter determining the amount of columns
+     * @return returns the checkOutScreen for the correct amount of
+     * rows and columns determined by the parameters
+     *******************************************************************/
     private Object checkOutScreen(int row, int col) {
         switch (col) {
             case 0:
@@ -180,20 +268,72 @@ public class ListModel extends AbstractTableModel {
         }
     }
 
+    /******************************************************************
+     * Private method used to determine the amount of rows and columns
+     * for the exceedsScreen
+     * @param row integer parameter determining the amount of rows
+     * @param col integer parameter determining the amount of columns
+     * @return returns the exceedsScreen for the correct amount of
+     * rows and columns determined by the parameters
+     *******************************************************************/
+    private Object exceedsScreen(int row, int col) {
+        switch (col) {
+            case 0:
+                return (fileredListCampSites.get(row).guestName);
 
+            case 1:
+                return (fileredListCampSites.get(row).getCost());
+
+            case 2:
+                return (formatter.format(fileredListCampSites.get(row).checkIn.getTime()));
+
+            case 3:
+                if (fileredListCampSites.get(row).estimatedCheckOut == null)
+                    return "-";
+
+                return (formatter.format(fileredListCampSites.get(row).estimatedCheckOut.
+                        getTime()));
+
+
+            default:
+                throw new RuntimeException("Row,col out of range: " + row + " " + col);
+        }
+    }
+
+    /******************************************************************
+     * Method used to add a new campsite to arraylist
+     * Updates the Screen using the UpdateScreen method
+     * @param a object to be added to the campsite arraylist
+     *******************************************************************/
     public void add(CampSite a) {
         listCampSites.add(a);
         UpdateScreen();
     }
 
+    /******************************************************************
+     * Method to get campsite Arraylist  at desired integer
+     * @param i integer to determine what arraylist to be selected
+     * @return Returns an arraylist campsite at location i
+     *******************************************************************/
     public CampSite get(int i) {
         return fileredListCampSites.get(i);
     }
 
+    /******************************************************************
+     * Method used to updatescreen with the integer index and specific
+     * campsite object
+     * @param index integer used for the index
+     * @param unit Object used for choosing a Campsite
+     *******************************************************************/
     public void upDate(int index, CampSite unit) {
         UpdateScreen();
     }
 
+    /******************************************************************
+     * Method used to save a list of campsites to be used at a later time
+     * @param filename The name of the file to be saved for future use
+     * @throws RuntimeException if there is a error saving the file
+     *******************************************************************/
     public void saveDatabase(String filename) {
         try {
             FileOutputStream fos = new FileOutputStream(filename);
@@ -206,6 +346,11 @@ public class ListModel extends AbstractTableModel {
         }
     }
 
+    /******************************************************************
+     * This method is used to load a previously saved list of campsites
+     * @param filename The name of the file that was saved at a earlier time
+     * @throws RuntimeException    when there is a error loading filename
+     *******************************************************************/
     public void loadDatabase(String filename) {
         listCampSites.clear();
 
@@ -281,4 +426,3 @@ public class ListModel extends AbstractTableModel {
         }
     }
 }
-
